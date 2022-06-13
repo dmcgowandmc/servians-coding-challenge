@@ -1,6 +1,6 @@
-#Code Challenge App Improvements and Task Breakdown
+# Code Challenge App Improvements and Task Breakdown
 
-##Improvements ( Suggesions)
+## Improvements ( Suggesions)
 
 * Whitelist IP's from security Group level
 * Cloud Front enable for caching (Put infront of ALB)
@@ -14,10 +14,10 @@
 
 
 
-##Task Breakdown
+## Task Breakdown
 
 * Design architecture Diagram
-* Implementing Core module with VPC,private subnets and Design natgateway to get internet to private subnets.
+* Implementing Core module with VPC,private subnets and Design nat gateway to get internet to private subnets.
 * Implementing Database module with auto generated password and usernames also it is designed to deploy inside private subnets
 * Designed other modules for security / certificates / Bastion and Configurations
 * Creating CI/CD github workflow Script.

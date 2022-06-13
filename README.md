@@ -1,26 +1,26 @@
-#Servians-Code-Challenge
+# Servians-Code-Challenge
 
 Code Challenge for DevOps consultant
 
-##Introduction
+## Introduction
 
 This infrastructure designed for build and deploy TechAppChallenge on AWS Cloud platform for demo purposes.
 
-##Prerequisites
+## Prerequisites
 
 * AWS Account with EKS, VPC, EC2, ELB, S3, SSM, RDS, IAM, Cloud Watch Logs Administrator Access
 * AWS CLI, Terraform installed 
 * Network reachability to "http://ipv4.icanhazip.com" (in evaluating public IP of Terraform core Workstation)
 
-##Architecture
+## Architecture
 
-###Architecture Diagram.
+### Architecture Diagram.
 ![Architecture Diagram](https://drive.google.com/file/d/1Ud2hF4D3TCWPbYR7rBoMESApQIuPtwq0/view)
 
 ```
 servians-code-challenge/infrastructure/Diagrams/servians-architecture-diagram.png
 ```
-##Directory Details
+## Directory Details
 
 * Environments : Directory Contains different environment directories. Backend and terraform configuration files are located under those environment folder. As for Demo purpose added one environment directory call preprod
 
@@ -80,7 +80,7 @@ all modules related to infarstructure. Inside diagram folder you can see diagram
   terraform destroy -var-file="../environments/preprod/servians_preprod.tfvars"
   ```
   
-##CI / CD Configurations
+## CI / CD Configurations
 * To configure CI / CD need to go to github repository and create github secrets with below variables.
 
   ```

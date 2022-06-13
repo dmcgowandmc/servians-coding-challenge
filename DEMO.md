@@ -1,6 +1,6 @@
-#Servian Code Challenge - Demo
+# Servian Code Challenge - Demo
 
-##ScreenShots of the hosted application
+## ScreenShots of the hosted application
 
 * When access the app using URL 
 
