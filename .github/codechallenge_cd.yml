@@ -1,0 +1,105 @@
+# This workflow will build a Java project with Maven , Docker, Kubernetes
+# For more information see: https://help.github.com/actions/language-and-framework-guides/building-and-testing-java-with-maven
+
+name: Build and publish artifacts/Docker Image To Servian EKS Cluster
+
+on:
+  push:
+    branches: [ develop ]
+    
+jobs:
+  build:
+    env: 
+      key1: ${{secrets.WORKFLOW_TOKEN}}
+      AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+      AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+    runs-on: ubuntu-latest
+#Those steps have designed to java maven build and it didnt removed from the code for demo purpose.However CD part with kubernets will be working as expected.
+    steps:
+#    - run: echo $key1
+#    - uses: actions/checkout@v2
+#    - name: Set up JDK 1.15
+#      uses: joschi/setup-jdk@v2
+#      with:
+#        java-version: '15'
+#    - name: Extract Maven project version
+#      run: |
+#        echo "::set-output name=sha_short::$(git rev-parse --short HEAD)"
+#      id: project
+     
+#    - name: Cache Maven packages
+#      uses: actions/cache@v2
+#      with:
+#       path: ~/.m2
+#       key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
+#       restore-keys: ${{ runner.os }}-m2
+ 
+ #   - name: Extract TEST_VERSION
+ #     if: success()
+ #     run: |
+ #       export VERSION=`cat pom.xml | grep "<version>" | head -n 2 | sed '1d' | awk -F'>' '{print $2}' | awk -F'<' '{print $1}'`
+ #       export TEST_VERSION=${VERSION}.${GITHUB_RUN_NUMBER}
+ #       echo "TEST_VERSION=${TEST_VERSION}" > ${GITHUB_ENV}
+ #       echo $TEST_VERSION
+  
+ #   - name: Publish to GitHub Packages
+ #     run: mvn --batch-mode --update-snapshots verify
+ #     env:
+ #       GITHUB_TOKEN: ${{secrets.WORKFLOW_TOKEN}}
+
+ #   - name: Set TEST build number
+ #     if: success()
+ #     run: mvn build-helper:parse-version versions:set -DnewVersion=\${parsedVersion.majorVersion}.\${parsedVersion.minorVersion}.\${parsedVersion.nextIncrementalVersion} versions:commit
+
+ #   - name: Build and deploy
+ #     if: success()
+ #     run: mvn deploy -s $GITHUB_WORKSPACE/.github/settings.xml
+ #   - run: mkdir -p path/to/artifact
+
+ #   - name: Build and publish Docker Image
+ #     if: success()
+ #     run: mvn compile jib:dockerBuild -pl App
+  
+ #   - name: Set outputs
+ #     id: vars
+ #     run: echo "::set-output name=sha_short::$(git rev-parse --short HEAD)"
+
+ #   - name: Check outputs
+ #     run: echo ${{ steps.vars.outputs.sha_short }}
+
+ #   - name: Add SHORT_SHA env property with commit short sha
+ #     run: echo "SHORT_SHA=`echo ${GITHUB_SHA} | cut -c1-7`" >> $GITHUB_ENV
+
+ #   - name: Push to ECR
+ #     id: ecr
+ #     uses: jwalton/gh-ecr-push@v1
+ #     with:
+ #       access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+ #       secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+ #       region: us-east-1
+ #       image: restrata/jstack/masterdata-service:${SHORT_SHA}
+
+    - name: Configure AWS Credentials
+      uses: aws-actions/configure-aws-credentials@v1
+      with:
+        aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        aws-region: us-east-1
+    - name: Modify image name In K8 Config
+      if: success()
+      run: |
+        export SHORT_SHA=${{ steps.vars.outputs.sha_short }}
+        echo $(sed -i "s/XcommitNumber/$SHORT_SHA/g" .kube8/servian-deployment.yml)
+        echo "$(cat .kube8/servian-deployment.yml)"
+    - name: Trigger deploy
+      uses: Consensys/kubernetes-action@master
+      env:
+        KUBE_CONFIG_DATA: ${{ secrets.KUBE_CONFIG_SERVIANS_DEV }}
+      with:
+        args: apply -f .kube8/servian-deployment.yml 
+    - name: verify deployment
+      uses: Consensys/kubernetes-action@master
+      env:
+        KUBE_CONFIG_DATA: ${{ secrets.KUBE_CONFIG_SERVIANS_DEV }}
+      with:
+        args: rollout restart deployment/servian-test-app
