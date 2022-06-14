@@ -15,17 +15,20 @@ This infrastructure designed for build and deploy TechAppChallenge on AWS Cloud 
 ## Architecture
 
 ### Architecture Diagram.
-![Architecture Diagram](https://drive.google.com/file/d/1Ud2hF4D3TCWPbYR7rBoMESApQIuPtwq0/view)
+![Architecture Diagram](https://github.com/codereposumudu/servians-coding-challenge/blob/356a5020640ed93740e4ba4e444f92f62eb5d9f6/infrastructure/Diagrams/application.png)
 
 ```
+Note : If you dont see image in the documentation please be kind enough to find the image from below path in the git repository
+
+
 servians-code-challenge/infrastructure/Diagrams/servians-architecture-diagram.png
 ```
 ## Directory Details
 
 * Environments : Directory Contains different environment directories. Backend and terraform configuration files are located under those environment folder. As for Demo purpose added one environment directory call preprod
 
-* Infrastructure : This directory coantains all the source code need to provition environment. Subdiroctories module containes
-all modules related to infarstructure. Inside diagram folder you can see diagrams related to this work.
+* Infrastructure : This directory contains all the source code need to provision environment. Subdirectories module contains
+all modules related to infrastructure. Inside diagram folder you can see diagrams related to this work.
   
 * .github/workflows : Contains CI/CD pipeline
 
@@ -35,13 +38,13 @@ all modules related to infarstructure. Inside diagram folder you can see diagram
 ## CI / CD workflows
 
 * We can use jenkins / github workflows as a push based deployments.
-* Also we can use gitops (Argocd, Flux) for CD part to deploy configurations automatically as a pull based deployments.
-* For Demo purpose added github workflow yaml into .github/workflows folder
+* Also we can use gitops (Argocd, Flux) for CD part to deploy configurations as pull based deployments.
+* For Demo purpose added github workflow yaml, into .github/workflows folder
 
 ## Let's provision the infrastructure
 
 
-* To configure infrastructure you need to declare below environment variables
+* To configure infrastructure, you need to declare below environment variables
 
   ```bash
   export AWS_ACCESS_KEY_ID=
@@ -81,7 +84,7 @@ all modules related to infarstructure. Inside diagram folder you can see diagram
   ```
   
 ## CI / CD Configurations
-* To configure CI / CD need to go to github repository and create github secrets with below variables.
+* To configure CI / CD need to go to github repository and create github secrets with below variables to declare pipeline variables.
 
   ```
   WORKFLOW_TOKEN (github token)
