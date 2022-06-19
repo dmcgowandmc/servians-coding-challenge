@@ -3,10 +3,6 @@
 
 name: Build and publish artifacts/Docker Image To Servian EKS Cluster
 
-on:
-  push:
-    branches: [ develop ]
-
 on: workflow_dispatch
 
 jobs:
